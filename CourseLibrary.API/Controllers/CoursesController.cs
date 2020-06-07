@@ -56,6 +56,8 @@ namespace CourseLibrary.API.Controllers
 
             return Ok(_mapper.Map<CourseDTO>(courseForAuthorFromRepo));
         }
+
+
         [HttpPost]
         public ActionResult<CourseDTO> CreateCourseForAuthor(
             Guid authorId, CourseForCreationDTO course)
@@ -73,6 +75,31 @@ namespace CourseLibrary.API.Controllers
             return CreatedAtRoute("GetCourseForAuthor",
                 new { authorId = authorId,courseId = courseToReturn.Id},courseToReturn);
 
+        }
+
+        [HttpPut("{courseId}")]
+        public ActionResult UpdateCourseForAuthor(Guid authorId, Guid courseId,
+            CourseForUpdateDTO course)
+        {
+            if(!_courseLibraryRepository.AuthorExists(authorId))
+            {
+                return NotFound();
+            }
+
+            var courseForAuthorFromRepo = _courseLibraryRepository.GetCourse(authorId, courseId); 
+
+            if(courseForAuthorFromRepo == null)
+            {
+                var courseToAdd = _mapper.Map<Course>(course);
+                courseToAdd.Id = courseId;
+            }
+
+            _mapper.Map(course, courseForAuthorFromRepo);
+
+            _courseLibraryRepository.UpdateCourse(courseForAuthorFromRepo);
+
+            _courseLibraryRepository.Save();
+            return NoContent();
         }
     }
 }
