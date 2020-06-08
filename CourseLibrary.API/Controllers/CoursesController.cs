@@ -4,6 +4,10 @@ using CourseLibrary.API.Models;
 using CourseLibrary.API.Services;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -118,22 +122,44 @@ namespace CourseLibrary.API.Controllers
             Guid courseId,
             JsonPatchDocument<CourseForUpdateDTO> patchDocument)
         {
-            if(!_courseLibraryRepository.AuthorExists(authorId))
+            if (!_courseLibraryRepository.AuthorExists(authorId))
             {
                 return NotFound();
             }
 
             var courseForAuthorFromRepo = _courseLibraryRepository.GetCourse(authorId, courseId);
 
-            if(courseForAuthorFromRepo == null)
+            if (courseForAuthorFromRepo == null)
             {
-                return NotFound();
+                var courseDto = new CourseForUpdateDTO();
+                patchDocument.ApplyTo(courseDto,ModelState);
+
+                if(!TryValidateModel(courseDto))
+                {
+                    return ValidationProblem(ModelState);
+                }
+
+                var courseToAdd = _mapper.Map<Entities.Course>(courseDto);
+                courseToAdd.Id = courseId;
+
+                _courseLibraryRepository.AddCourse(authorId, courseToAdd);
+                _courseLibraryRepository.Save();
+
+                var courseToReturn = _mapper.Map<CourseDTO>(courseToAdd);
+
+                return CreatedAtRoute("GetCourseForAuthor",
+                    new { authorId, courseId = courseToReturn.Id }, courseToReturn);
             }
 
             var courseToPatch = _mapper.Map<CourseForUpdateDTO>(courseForAuthorFromRepo);
 
             //add validation
-            patchDocument.ApplyTo(courseToPatch);
+            patchDocument.ApplyTo(courseToPatch, ModelState);
+
+           if(!TryValidateModel(courseToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
 
             _mapper.Map(courseToPatch, courseForAuthorFromRepo);
 
@@ -142,6 +168,14 @@ namespace CourseLibrary.API.Controllers
             _courseLibraryRepository.Save();
 
             return NoContent();
+        }
+
+        public override ActionResult ValidationProblem(
+            [ActionResultObjectValue] ModelStateDictionary modelStateDictionary)
+        {
+            var options = HttpContext.RequestServices
+                .GetRequiredService<IOptions<ApiBehaviorOptions>>();
+            return (ActionResult)options.Value.InvalidModelStateResponseFactory(ControllerContext);
         }
     }
 }
