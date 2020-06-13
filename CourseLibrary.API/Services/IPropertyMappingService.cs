@@ -6,6 +6,6 @@ namespace CourseLibrary.API.Services
     {
         Dictionary<string, PropertyMappingValue> GetPropertyMapping<TSource, TDestination>();
 
-        bool ValidMappingExistsFor<TSource, TDestination>(string fields)
+        bool ValidMappingExistsFor<TSource, TDestination>(string fields);
     }
 }
