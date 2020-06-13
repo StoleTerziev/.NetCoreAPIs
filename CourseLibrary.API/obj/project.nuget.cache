@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "bsiFaI4CRSH9Wc/1+N8MLZbAQRUkXpb5GboVJxa+Bo8gEpeVd7ybxKLHp7ZDtkmcH/7fOnX3+X/yu306g/8YYA==",
+  "dgSpecHash": "uC4/KNHhtYCV6VhpizpkeSWiGdO3H/42t9EXYoef3DbbcwuDobhgOZsZhomhSeOwOMCmhTfAfibwo+6lCUJ7ZA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Stojan-PC\\source\\repos\\CourseLibrary\\CourseLibrary.API\\CourseLibrary.API.csproj",
   "expectedPackageFiles": [
@@ -61,6 +61,7 @@
     "C:\\Users\\Stojan-PC\\.nuget\\packages\\system.io.filesystem\\4.3.0\\system.io.filesystem.4.3.0.nupkg.sha512",
     "C:\\Users\\Stojan-PC\\.nuget\\packages\\system.io.filesystem.primitives\\4.3.0\\system.io.filesystem.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\Stojan-PC\\.nuget\\packages\\system.linq\\4.3.0\\system.linq.4.3.0.nupkg.sha512",
+    "C:\\Users\\Stojan-PC\\.nuget\\packages\\system.linq.dynamic.core\\1.1.2\\system.linq.dynamic.core.1.1.2.nupkg.sha512",
     "C:\\Users\\Stojan-PC\\.nuget\\packages\\system.net.nameresolution\\4.3.0\\system.net.nameresolution.4.3.0.nupkg.sha512",
     "C:\\Users\\Stojan-PC\\.nuget\\packages\\system.net.primitives\\4.3.0\\system.net.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\Stojan-PC\\.nuget\\packages\\system.private.datacontractserialization\\4.3.0\\system.private.datacontractserialization.4.3.0.nupkg.sha512",
